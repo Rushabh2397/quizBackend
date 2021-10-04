@@ -1,7 +1,7 @@
 import express from 'express'
 import path from  'path'
 import  cookieParser from 'cookie-parser'
-
+const DB = require('./db/connection')
 const indexRouter = require('./routes/index');
 
 

@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express'
+const router = express.Router();
+const isUserAuthenticated = require('../middlewares/userAuthenticated')
+const isUserPresent = require('../middlewares/isUserPresent')
+const QuizController = require('../controllers/quiz')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+
+router.all('/api/*',isUserAuthenticated,isUserPresent )
+
+
+// Quiz Api's
+
+//router.get('/quiz/import',QuizController.importQuiz)
+
 
 module.exports = router;
