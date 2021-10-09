@@ -91,6 +91,7 @@ let _self = {
             (body, nextCall) => {
                 Quiz.find({ category: body.category, difficulty: body.diffculty }, (err, quiz) => {
                     if (err) {
+                        console.log("err",err)
                         return nextCall(err)
                     }
                     nextCall(null, quiz)
@@ -105,6 +106,7 @@ let _self = {
             }
         ], (err, response) => { 
             if(err){
+                console.log("err",err)
                 return res.status(400).json({
                     message : (err && err.message) || 'Oops! Failed to get quiz.'
                 })

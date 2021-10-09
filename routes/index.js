@@ -6,7 +6,7 @@ const QuizController = require('../controllers/quiz')
 const UserController = require('../controllers/user')
 
 
-router.all('/api/*',isUserAuthenticated,isUserPresent )
+router.all('*/api/*',isUserAuthenticated,isUserPresent)
 
 
 // Quiz Api's
@@ -17,6 +17,8 @@ router.all('/api/*',isUserAuthenticated,isUserPresent )
 
 router.post('/user/auth/register',UserController.register)
 router.post('/user/auth/login',UserController.login)
+router.post('/user/api/add_user_score',UserController.addUserScore)
+router.get('/user/api/get_user_scorecard',UserController. getUserScorecard)
 
 // Quiz Controller
 
