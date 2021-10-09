@@ -20,8 +20,9 @@ router.post('/user/auth/login',UserController.login)
 router.post('/user/api/add_user_score',UserController.addUserScore)
 router.get('/user/api/get_user_scorecard',UserController. getUserScorecard)
 
-// Quiz Controller
 
+// Quiz Controller
 router.post('/quiz/api/get_quiz',QuizController.getQuiz)
+router.post('/quiz/auth/get_world_scoreboard',UserController.getWorldScoreBoard)
 
 module.exports = router;

@@ -199,7 +199,7 @@ module.exports = {
                 aggregateQuery.push({
                     $group: {
                         _id: "$scorecard.category",
-                        category: {$first:"$scorecard.category"},
+                        category: { $first: "$scorecard.category" },
                         scorecard: {
                             $push: {
                                 score: "$scorecard.score",
@@ -212,11 +212,10 @@ module.exports = {
                 })
 
                 User.aggregate(aggregateQuery).exec((err, userScorecard) => {
-                    console.log(userScorecard)
                     if (err) {
                         return nextCall(err)
                     }
-                    nextCall(null,userScorecard)
+                    nextCall(null, userScorecard)
                 })
 
             }
@@ -230,6 +229,70 @@ module.exports = {
             res.json({
                 status: 'success',
                 message: 'User Scorecard',
+                data: response
+            })
+        })
+    },
+
+    getWorldScoreBoard: (req, res) => {
+        async.waterfall([
+            (nextCall) => {
+                let aggregateQuery = [];
+
+                aggregateQuery.push({
+                    $unwind: {
+                        path: "$scorecard",
+                        preserveNullAndEmptyArrays: true
+                    }
+                })
+
+                aggregateQuery.push({
+                    $match: {
+                        "scorecard.category": req.body.category
+                    }
+                })
+
+                aggregateQuery.push({
+                    $sort: {
+                        "scorecard.score": -1
+                    }
+                })
+
+                aggregateQuery.push({
+                    $group: {
+                        _id: "$scorecard.difficulty",
+                        level: { $first: "$scorecard.difficulty" },
+                        scorecard: {
+                            $push: {
+                                category: "$scorecard.category",
+                                score: "$scorecard.score",
+                                name: "$name",
+                                difficulty: "$scorecard.difficulty",
+                                email: "$email",
+                                played_at:{ $dateToString: { format: "%Y-%m-%d", date: "$scorecard.played_at" } }
+                            }
+                        }
+                    }
+                })
+
+                User.aggregate(aggregateQuery).exec((err, list) => {
+                    if (err) {
+                        return nextCall(err)
+                    }
+
+                    nextCall(null, list)
+                })
+            }
+        ], (err, response) => {
+            if (err) {
+                return res.status(400).json({
+                    message: (err && err.message) || 'Oops! Failed to get user scorecard.'
+                })
+            }
+
+            res.json({
+                status: 'success',
+                message: 'World Scorecard',
                 data: response
             })
         })
