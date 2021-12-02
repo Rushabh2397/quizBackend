@@ -177,7 +177,8 @@ module.exports = {
 
                 aggregateQuery.push({
                     $match: {
-                        _id: mongoose.Types.ObjectId(req.user._id)
+                        _id: mongoose.Types.ObjectId(req.user._id),
+                        scorecard:{$ne:[]}
                     }
 
                 })
